@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "module": "commonJS",
+    "target": "esnext",
+    "checkJs": true,
+    "resolveJsonModule": true,
+    "baseUrl": ".",
+    "paths": {
+      "@utils/*": ["./utils/*"]
+    }
+  },
+  "include": ["."]
+}
