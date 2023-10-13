@@ -10,7 +10,7 @@ npm run clean
 
 # UI functional tests
 
-npx playwright test ISOEH_2243 --workers=1
+npx playwright test test_name --workers=1
 
 #generate final report and combine it in one html file
 echo \"⌚ Saving the allure report\" && npx allure generate --clean && node ./node_modules/allure-single-html-file-js/combine.js ./allure-report && echo \"⌚ Allure report saved in allure-report folder\"

@@ -1,5 +1,6 @@
 import { test, expect } from '@playwright/test'
 import { user } from '@utils/data-factory'
+import fs from 'fs'
 test.describe(`Bookstore web application "Elements" >> `, async () => {
   test.beforeEach(async ({ page }) => {
     await page.route('https://securepubads.g.doubleclick.net/**', route => route.abort())
@@ -185,5 +186,22 @@ test.describe(`Bookstore web application "Elements" >> `, async () => {
     expect(response.status()).toBe(200)
     await page.goto(hrefs[1])
     await expect(page.getByText('This page returned a 500 status code.')).toBeVisible()
+  })
+  test('Upload and Download', async ({ page }) => {
+    await page.getByText('Upload and Download', { exact: true }).click()
+    const downloadPromise = page.waitForEvent('download')
+    await page.getByRole('link', { name: 'Download' }).click({ force: true })
+    const download = await downloadPromise
+    await download.saveAs(`./data/${download.suggestedFilename()}`)
+    fs.stat('./data/' + download.suggestedFilename(), error => {
+      error ? console.log('file not found') : console.log('file downloaded successfully')
+    })
+    expect(download.suggestedFilename()).toBe('sampleFile.jpeg')
+    expect((await fs.promises.stat('./data/' + download.suggestedFilename())).size).toBeGreaterThan(4_000)
+    const fileChooserPromise = page.waitForEvent('filechooser')
+    await page.locator('#uploadFile').click()
+    const fileChooser = await fileChooserPromise
+    await fileChooser.setFiles(`./data/${download.suggestedFilename()}`)
+    await expect(page.getByText(download.suggestedFilename())).toBeVisible()
   })
 })
