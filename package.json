@@ -9,7 +9,7 @@
     "test": "npx playwright test",
     "posttest": "echo \"⌚ Saving the allure report\" && allure generate --clean && node ./node_modules/allure-single-html-file-js/combine.js ./allure-report && echo \"⌚ Allure report saved in allure-report folder\"",
     "report": "allure open",
-    "format": "echo Formatting the code ⌛ && prettier --write ./projects/**/*.js && echo \"✅ Code formatted, ready to commit!\"",
+    "format": "echo Formatting the code ⌛ && prettier --write ./tests/**/*.js && echo \"✅ Code formatted, ready to commit!\"",
     "lint": "echo Linting the code ⌛ && eslint ./**/*.js --fix && echo \"✅ Code linted, ready to commit!\"",
     "docs": "jsdoc -d docs -c jsdoc.config.json"
   },
