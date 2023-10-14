@@ -20,10 +20,10 @@
   },
   "lint-staged": {
     "*.+(js|ts|tsx)": [
-      "npm run lint"
+      "eslint --fix"
     ],
     "**/*.+(js|ts|json)": [
-      "npm run format"
+      "prettier --write"
     ]
   },
   "keywords": [],
