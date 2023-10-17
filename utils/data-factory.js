@@ -9,12 +9,18 @@ export const user = {
   }),
   age: faker.number.int({ min: 1, max: 99 }),
   password: faker.internet.password(),
-  phoneNumber: faker.number.int({ min: 1000000000, max: 9831063781 }),
+  phoneNumber: faker.number.int({ min: 1000000000, max: 9999999999 }),
   street: faker.location.streetAddress(),
   city: faker.location.city(),
   state: faker.location.state(),
   postalCode: faker.location.zipCode(),
   country: faker.location.country(),
-  dateOfBirth: faker.date.birthdate().toISOString().slice(0, 10),
+  dateOfBirth:
+    faker.date.birthdate().toDateString().match(/\d{2}/)[0] +
+    faker.date
+      .birthdate()
+      .toDateString()
+      .match(/\s\w+\s/)[0] +
+    faker.date.birthdate().toDateString().match(/\d{4}/)[0],
   gender: faker.person.sex()
 }

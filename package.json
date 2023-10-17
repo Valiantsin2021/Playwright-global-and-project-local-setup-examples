@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
+  "type": "module",
   "scripts": {
     "postinstall": "echo \"All dependencies were installed sucessfully ✅ You can now run tests by typing: npm test\"",
     "clean": "echo \"❌ Cleaning the reports and downloads folders\" && rimraf ./allure-report/* && rimraf ./allure-results/* && rimraf test-results/* && echo \"✅ All reports folders cleaned!\"",

@@ -166,7 +166,7 @@ test.describe(`Bookstore web application "Elements" >> `, async () => {
   })
   test('Broken Links - Images', async ({ page, request }) => {
     await page.getByText('Broken Links - Images', { exact: true }).click()
-    const imgs = await page
+    const imgs = page
       .locator('div')
       .filter({ has: page.getByText('Valid image') })
       .locator('img')
@@ -175,7 +175,7 @@ test.describe(`Bookstore web application "Elements" >> `, async () => {
     expect(response.status()).toBe(200)
     response = await request.get(`https://demoqa.com/images/${srcs[1]}`)
     expect(response.status()).toBe(200)
-    const links = await page
+    const links = page
       .locator('div')
       .filter({ has: page.getByText('Valid link') })
       .locator('a')
@@ -204,4 +204,59 @@ test.describe(`Bookstore web application "Elements" >> `, async () => {
     await fileChooser.setFiles(`./data/${download.suggestedFilename()}`)
     await expect(page.getByText(download.suggestedFilename())).toBeVisible()
   })
+})
+test.describe(`Bookstore web application "Forms" >> `, async () => {
+  test.beforeEach(async ({ page }) => {
+    await page.route('https://securepubads.g.doubleclick.net/**', route => route.abort())
+    await page.goto('/')
+    await page.getByText('Forms').click()
+  })
+  test.use({ storageState: { cookies: [], origins: [] } })
+  test(`Practice Form`, async ({ page }) => {
+    await page.getByText('Practice Form', { exact: true }).click()
+    await expect(page.getByText('Student Registration Form')).toBeVisible()
+    await page.getByPlaceholder('First Name').fill(user.firstName)
+    await page.getByPlaceholder('Last Name').fill(user.lastName)
+    await page.getByPlaceholder('name@example.com').fill(user.email)
+    await page.locator('#gender-radio-1').check({ force: true })
+    await page.getByPlaceholder('Mobile Number').fill('' + user.phoneNumber)
+    await page.locator('#dateOfBirthInput').fill(user.dateOfBirth, { force: true })
+    await page.locator('#subjectsInput').fill('E', { force: true })
+    await page.getByText('English', { exact: true }).click()
+    await page.locator('#subjectsInput').pressSequentially('Comp')
+    await page.getByText('Computer Science', { exact: true }).click()
+
+    await page.locator('#hobbies-checkbox-1').check({ force: true })
+    await page.locator('#hobbies-checkbox-2').check({ force: true })
+    const fileChooserPromise = page.waitForEvent('filechooser')
+    await page.locator('#uploadPicture').click()
+    const fileChooser = await fileChooserPromise
+    await fileChooser.setFiles(`./data/sampleFile.jpeg`)
+    await page
+      .getByPlaceholder('Current Address')
+      .fill(`${user.street}, ${user.city}, ${user.country}, ${user.postalCode}`)
+    await page.getByText('Select State').click()
+    await page.getByText('Haryana', { exact: true }).click({ force: true })
+    await page.getByText('Select City').click()
+    await page.getByText('Karnal', { exact: true }).click({ force: true })
+    await page.getByRole('button', { name: 'Submit' }).click({ force: true })
+    const successForm = await page.locator('tbody tr td:nth-child(2)').allTextContents()
+    successForm.splice(4, 1)
+    expect(successForm).toStrictEqual([
+      `${user.firstName} ${user.lastName}`,
+      user.email,
+      'Male',
+      '' + user.phoneNumber,
+      // /.*/,
+      'English, Computer Science',
+      'Sports, Reading',
+      'sampleFile.jpeg',
+      `${user.street}, ${user.city}, ${user.country}, ${user.postalCode}`,
+      'Haryana Karnal'
+    ])
+    await page.getByRole('button', { name: 'Close' }).click({ force: true })
+  })
+})
+test.describe(`Bookstore web application "Alerts, Frame & Windows" >> `, async () => {
+  test(`Browser Windows`, async ({ page }) => {})
 })

@@ -9,5 +9,6 @@
       "@utils/*": ["./utils/*"]
     }
   },
-  "include": ["."]
+  "include": ["."],
+  "exclude": ["node_modules"]
 }

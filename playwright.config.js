@@ -48,38 +48,16 @@ export default defineConfig({
     launchOptions: { args: ['--start-maximized'] },
     // viewport: { width: 1920, height: 1080 },
     baseURL: process.env.BASEURL,
-    storageState: './utils/storage.json',
     headless: true,
     trace: 'retain-on-failure'
   },
   projects: [
     {
-      name: 'auth',
-      testMatch: /.*.setup.js/
-    },
-    {
       name: 'Chrome Browser',
-      testMatch: /.*.spec.js/,
+      testMatch: [/.*.spec.js/],
       use: {
         channel: 'chrome'
       }
-    },
-    {
-      name: 'BookStore',
-      testMatch: /.*.store.js/,
-      use: {
-        channel: 'chrome',
-        baseURL: process.env.BOOKSTORE
-      }
-    },
-    {
-      name: 'Chrome auth setup use',
-      testMatch: /.*_auth.test.js/,
-      use: {
-        channel: 'chrome',
-        storageState: './utils/auth.json'
-      },
-      dependencies: ['auth']
     }
   ]
 })
