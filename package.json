@@ -20,10 +20,10 @@
     }
   },
   "lint-staged": {
-    "*.+(js|ts|tsx)": [
+    "*.+(cjs|js|ts|tsx)": [
       "eslint --fix"
     ],
-    "**/*.+(js|ts|json)": [
+    "**/*.+(cjs|js|ts|json)": [
       "prettier --write"
     ]
   },
